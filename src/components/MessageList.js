@@ -7,7 +7,7 @@ export const MessageList = ({ messages }) => {
   return (
     <div className="messages">
       {messages.map((msgObj, idx) => {
-        const { user, text } = JSON.parse(msgObj);
+        const { user, text } = msgObj;
         return (
           <div className="message-bubble" key={idx}>
             <div

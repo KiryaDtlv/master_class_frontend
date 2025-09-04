@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 const emojis = ['😀', '😂', '🎉', '🥳', '😎', '👍', '❤️'];
 
-export const MessageInput = ({ ws, username }) => {
+export const MessageInput = ({ username, onSend }) => {
   const [text, setText] = useState("");
 
   const sendMessage = (e) => {
     e.preventDefault();
     if (text.trim()) {
-      ws.send(JSON.stringify({ user: username, text }));
+      onSend({ user: username, text })
       setText("");
     }
   };
