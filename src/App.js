@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
+import { ChatWindow } from './components/ChatWindow';
+import { UsernameInput } from './components/UsernameInput';
 import './App.css';
 
 function App() {
+  const [ws, setWs] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8000/ws");
+    socket.onmessage = (event) => {
+      setMessages((prev) => [...prev, event.data]);
+    };
+    setWs(socket);
+    return () => socket.close();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Какой-то чат</h1>
+      {!username ? (
+        <UsernameInput setUsername={setUsername} />
+      ) : (
+        <ChatWindow ws={ws} messages={messages} username={username} />
+      )}
     </div>
   );
 }
